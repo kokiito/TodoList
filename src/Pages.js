@@ -21,8 +21,7 @@ class List extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        todos: [],
-        name: ''
+        todos: []
       };
     }
 
@@ -37,6 +36,13 @@ class List extends Component {
       this.setState({
         todos: [...todos, name]
       });
+/*
+      todos.push({
+        "id": 1,
+        "title": 'コードを書く',
+        "isdoing": false
+      })
+      */
     }
 
     removeTodo = (index) => {
@@ -44,6 +50,14 @@ class List extends Component {
       this.setState({
         todos: [...todos.slice(0, index), ...todos.slice(index + 1)]
       });
+/*
+      todos.isFavorite = todos.isFavorite !== true
+      api.updateArticle(todos.id, todos).then((result) => {
+        const nextArticles = immutable.List(this.state.todos)
+        nextArticles[index] = result.article
+        this.setState({articles: nextArticles})
+      })
+      */
     }
 
     render() {
@@ -52,10 +66,15 @@ class List extends Component {
         <input type="text" onInput={this.onInput} />
         <button onClick={this.addTodo} >登録</button>
         <ul>
-          {todos.map((todo, index) => <li key={index}>
-            {todo}
-            <button onClick={() => { this.removeTodo(index) }}>削除</button>
-          </li>)}
+        
+
+          {this.state.todos.map((x, index) => (
+            <li key={index}>
+              <Link to={`/todos/${x.id}`}>{x.title}</Link>
+              {" "}
+              <FavoriteButton isFavorite={x.isdoing} />
+            </li>
+          ))}
         </ul>
       </div>);
     }
@@ -64,7 +83,7 @@ class List extends Component {
 
 }
 
-class DoneList extends Component {
+class DoningList extends Component {
 
   constructor(props) {
     super(props)
@@ -98,25 +117,25 @@ class Show extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { article: {} }
+    this.state = { todos: {} }
   }
 
   componentWillMount() {
     const { id } = this.props.match.params
-    api.showArticle(parseInt(id, 10)).then((result) => {
-      this.setState({article: result.article})
+    api.showPage(parseInt(id, 10)).then((result) => {
+      this.setState({todos: result.todos})
     })
   }
 
   render() {
-    const {article} = this.state
+    const {todos} = this.state
     return (
       <div>
-        <h2>{article.title}</h2>
-        <p>{article.description}</p>
+        <h2>{todos.title}</h2>
+
       </div>
     )
   }
 }
 
-export default { List, DoneList, Show }
+export default { List, DoningList, Show }
