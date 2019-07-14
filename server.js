@@ -1,4 +1,3 @@
-const faker = require('faker')
 const jsonServer = require('json-server')
 const server = jsonServer.create()
 
@@ -10,25 +9,28 @@ server.use((req, res, next) => {
 })
 
 const rewriter = jsonServer.rewriter({'/api/*': '/$1'})
-const router = jsonServer.router(getArticles())
+const router = jsonServer.router(setTodos())
 
 server.use(rewriter)
 server.use(router)
 
-function getArticles() {
-  const articles = []
+function setTodos() {
+  const todos = []
 
-  for (var id = 1; id < 51; id++) {
-
-    articles.push({
-      "id": id,
-      "title": faker.lorem.words(),
-      "description": faker.lorem.paragraphs(),
-      "isFavorite": false
+    todos.push({
+      "id": 1,
+      "title": 'コードを書く',
+      "isdoing": false
     })
-  }
 
-  return { "articles": articles }
+    todos.push({
+      "id": 2,
+      "title": 'サーバを立てる',
+      "isdoing": true
+    })
+
+
+  return { "todos": todos }
 }
 
 module.exports = server
