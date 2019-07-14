@@ -16,72 +16,75 @@ const FavoriteButton = ({isFavorite, onClick}) => (
 
 
 
-class List extends Component {
+  class List extends Component {
 
     constructor(props) {
-      super(props);
-      this.state = {
-        todos: []
-      };
+      super(props)
+      this.state = { todos: [],name: '' }
     }
 
-    onInput = (e) => {
-      this.setState({
-        name: e.target.value
-      });
-    }
+  onInput = (e) => {
+    this.setState({
+      name: e.target.value
+    });
+  }
 
-    addTodo = () => {
-      const { todos, name } = this.state;
-      this.setState({
-        todos: [...todos, name]
-      });
-/*
-      todos.push({
-        "id": 1,
-        "title": 'コードを書く',
-        "isdoing": false
+  addTodo = () => {
+    const { todos, name } = this.state;
+    this.setState({
+      todos: [...todos, name]
+    });
+  }
+  removeTodo = (index) => {
+    const { todos, name } = this.state;
+    this.setState({
+      todos: [...todos.slice(0, index), ...todos.slice(index + 1)]
+    });
+  }
+
+
+
+    componentWillMount() {
+      api.listArticles().then((result) => {
+        this.setState({todos: result.todos, current: 1})
       })
-      */
     }
 
-    removeTodo = (index) => {
-      const { todos, name } = this.state;
-      this.setState({
-        todos: [...todos.slice(0, index), ...todos.slice(index + 1)]
-      });
-/*
-      todos.isFavorite = todos.isFavorite !== true
-      api.updateArticle(todos.id, todos).then((result) => {
+    handleFavorite(todo, index) {
+      todo.isFavorite = todo.isFavorite !== true
+      api.updateArticle(todo.id, todo).then((result) => {
         const nextArticles = immutable.List(this.state.todos)
         nextArticles[index] = result.article
-        this.setState({articles: nextArticles})
+        this.setState({todos: nextArticles})
       })
-      */
     }
 
     render() {
       const { todos } = this.state;
-      return (<div>
-        <input type="text" onInput={this.onInput} />
-        <button onClick={this.addTodo} >登録</button>
-        <ul>
-        
+      return (
+        <div>
+          <h2>Todos</h2>
+          <input type="text" onInput={this.onInput} />
+          <button onClick={this.addTodo} >登録</button>
+          <ul>
+            {this.state.todos.map((x, index) => (
+              <li key={index}>
+              <FavoriteButton isFavorite={x.isFavorite} onClick={() => this.handleFavorite(x, index)} />
+                <Link to={`/pages/${x.id}`}>{x.title}</Link>
+                {" "}
 
-          {this.state.todos.map((x, index) => (
-            <li key={index}>
-              <Link to={`/todos/${x.id}`}>{x.title}</Link>
-              {" "}
-              <FavoriteButton isFavorite={x.isdoing} />
-            </li>
-          ))}
-        </ul>
-      </div>);
+                <button onClick={() => { this.removeTodo(index) }}>削除</button>
+              </li>
+            ))}
+          </ul>
+
+
+        </div>
+      )
     }
+  }
 
 
-
-}
 
 class DoningList extends Component {
 
