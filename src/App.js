@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Switch, Route, Link, NavLink, withRouter } from 'react-router-dom'
-
-import Articles from './Pages'
+import Pages from './Pages'
 
 
 const Header = ({onClick}) => (
@@ -10,8 +9,8 @@ const Header = ({onClick}) => (
 
 const Nav = () => (
   <ul className="nav nav-pills">
-    <li><NavLink exact to="/articles">--ToDoList--</NavLink></li>
-    <li><NavLink exact to="/articles/favorite">--Done List--</NavLink></li>
+    <li><NavLink exact to="/pages">--ToDoList--</NavLink></li>
+    <li><NavLink exact to="/pages/doing">--Doning List--</NavLink></li>
   </ul>
 )
 
@@ -24,10 +23,10 @@ const Routes = withRouter(({history}) => (
 
     <Nav />
     <Switch>
-      <Route exact path="/" component={Articles.List}/>
-      <Route exact path="/articles" component={Articles.List}/>
-      <Route exact path="/articles/favorite" component={Articles.DoneList}/>
-      <Route exact path="/articles/:id" component={Articles.Show}/>
+      <Route exact path="/" component={Pages.List}/>
+      <Route exact path="/pages" component={Pages.List}/>
+      <Route exact path="/pages/doning" component={Pages.DoningList}/>
+      <Route exact path="/pages/:id" component={Pages.Show}/>
     </Switch>
 
     <Footer />

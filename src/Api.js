@@ -15,7 +15,7 @@ export default class Api {
   }
 
   listArticles(page=1) {
-    return axios.get(`${this.baseUrl}/api/articles?_page=${page}`).then((res) => {
+    return axios.get(`${this.baseUrl}/api/todos?_page=${page}`).then((res) => {
       return {
         "articles": res.data || [],
         "links": parse(res.headers.link)
@@ -24,7 +24,7 @@ export default class Api {
   }
 
   listFavoriteArticles(page=1) {
-    return axios.get(`${this.baseUrl}/api/articles?isFavorite=true&_page=${page}&_limit=50`).then((res) => {
+    return axios.get(`${this.baseUrl}/api/todos?isdoing=true&_page=${page}&_limit=50`).then((res) => {
       return {
         "articles": res.data || [],
         "links": parse(res.headers.link)
@@ -32,20 +32,20 @@ export default class Api {
     })
   }
 
-  showArticle(id) {
-    return axios.get(`${this.baseUrl}/api/articles/${id}`).then((res) => {
-      return { "article": res.data }
+  showPage(id) {
+    return axios.get(`${this.baseUrl}/api/todos/${id}`).then((res) => {
+      return { "todos": res.data }
    })
   }
 
   updateArticle(id, params) {
-    return axios.put(`${this.baseUrl}/api/articles/${id}`, params).then((res) => {
+    return axios.put(`${this.baseUrl}/api/todos/${id}`, params).then((res) => {
       return { "article": res.data }
     })
   }
 
   postArticle(id, params) {
-    return axios.put(`${this.baseUrl}/api/articles/${id}`, params).then((res) => {
+    return axios.put(`${this.baseUrl}/api/todos/${id}`, params).then((res) => {
       return { "article": res.data }
     })
   }
