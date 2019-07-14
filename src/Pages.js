@@ -10,8 +10,8 @@ import Api from './Api'
 
 const api = new Api(`http://127.0.0.1:4000`)
 
-const FavoriteButton = ({isFavorite, onClick}) => (
-  <FaRegCheckSquare style={{cursor: "pointer"}} color={isFavorite ? "#ffa500" : "#eee"} onClick={onClick} />)
+const FavoriteButton = ({isDoing, onClick}) => (
+  <FaRegCheckSquare style={{cursor: "pointer"}} color={isDoing ? "#ffa500" : "#eee"} onClick={onClick} />)
 
 
 
@@ -23,25 +23,28 @@ const FavoriteButton = ({isFavorite, onClick}) => (
       this.state = { todos: [],name: '' }
     }
 
-  onInput = (e) => {
-    this.setState({
-      name: e.target.value
-    });
-  }
+    onInput = (e) => {
+      this.setState({
+        name: e.target.value
+      });
+    }
 
-  addTodo = () => {
-    const { todos, name } = this.state;
-    this.setState({
-      todos: [...todos, name]
-    });
-  }
-  removeTodo = (index) => {
-    const { todos, name } = this.state;
-    this.setState({
-      todos: [...todos.slice(0, index), ...todos.slice(index + 1)]
-    });
-  }
+    addTodo() {
+      const { todos, name } = this.state;
+      this.setState({
+        todos: [...todos, name]
+      });
+      console.log(todos)
+      api.postTodo(this.state.name)
+    }
 
+    removeTodo = (index) => {
+      const { todos, name } = this.state;
+      this.setState({
+        todos: [...todos.slice(0, index), ...todos.slice(index + 1)]
+      });
+      api.deleteTodo(todos[index].id)
+    }
 
 
     componentWillMount() {
@@ -51,8 +54,8 @@ const FavoriteButton = ({isFavorite, onClick}) => (
     }
 
     handleFavorite(todo, index) {
-      todo.isFavorite = todo.isFavorite !== true
-      api.updateArticle(todo.id, todo).then((result) => {
+      todo.isDoing = todo.isDoing !== true
+      api.updateTodo(todo.id, todo).then((result) => {
         const nextArticles = immutable.List(this.state.todos)
         nextArticles[index] = result.article
         this.setState({todos: nextArticles})
@@ -64,12 +67,12 @@ const FavoriteButton = ({isFavorite, onClick}) => (
       return (
         <div>
           <h2>Todos</h2>
-          <input type="text" onInput={this.onInput} />
-          <button onClick={this.addTodo} >登録</button>
+
+
           <ul>
             {this.state.todos.map((x, index) => (
               <li key={index}>
-              <FavoriteButton isFavorite={x.isFavorite} onClick={() => this.handleFavorite(x, index)} />
+              <FavoriteButton isDoing={x.isDoing} onClick={() => this.handleFavorite(x, index)} />
                 <Link to={`/pages/${x.id}`}>{x.title}</Link>
                 {" "}
 
@@ -77,6 +80,9 @@ const FavoriteButton = ({isFavorite, onClick}) => (
               </li>
             ))}
           </ul>
+
+          <input type="text" onInput={this.onInput} />
+          <button onClick={() => this.addTodo()} >登録</button>
 
 
         </div>
@@ -86,29 +92,29 @@ const FavoriteButton = ({isFavorite, onClick}) => (
 
 
 
-class DoningList extends Component {
+class DoingList extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { articles: [] }
+    this.state = { todos: [] }
   }
 
   componentWillMount() {
     api.listFavoriteArticles().then((result) => {
-      this.setState({articles: result.articles})
+      this.setState({todos: result.todos})
     })
   }
 
   render() {
 
-    const {articles} = this.state
+    const {todos} = this.state
 
     return (
       <div>
-        <h2>Favorites</h2>
+        <h2>DoingList</h2>
         <ul>
-        {this.state.articles.map((x, index) => (
-          <li key={index}><Link to={`/articles/${x.id}`}>{x.title}</Link></li>
+        {this.state.todos.map((x, index) => (
+          <li key={index}><Link to={`/pages/${x.id}`}>{x.title}</Link></li>
         ))}
         </ul>
       </div>
@@ -141,4 +147,4 @@ class Show extends Component {
   }
 }
 
-export default { List, DoningList, Show }
+export default { List, DoingList, Show }

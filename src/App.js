@@ -25,7 +25,7 @@ const Routes = withRouter(({history}) => (
     <Switch>
       <Route exact path="/" component={Pages.List}/>
       <Route exact path="/pages" component={Pages.List}/>
-      <Route exact path="/pages/doning" component={Pages.DoningList}/>
+      <Route exact path="/pages/doing" component={Pages.DoingList}/>
       <Route exact path="/pages/:id" component={Pages.Show}/>
     </Switch>
 
