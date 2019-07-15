@@ -29,13 +29,21 @@ const FavoriteButton = ({isDoing, onClick}) => (
       });
     }
 
-    addTodo() {
+    addTodo(index) {
       const { todos, name } = this.state;
-      this.setState({
-        todos: [...todos, name]
-      });
-      console.log(todos)
-      api.postTodo(this.state.name)
+      api.postTodo(name).then((result) => {
+          todos.push({
+          id: result.todo.id,
+          title: result.todo.title,
+          isDoing: false,
+        })
+        this.setState({
+          todos:todos
+        })
+      })
+
+
+
     }
 
     removeTodo = (index) => {
@@ -82,7 +90,7 @@ const FavoriteButton = ({isDoing, onClick}) => (
           </ul>
 
           <input type="text" onInput={this.onInput} />
-          <button onClick={() => this.addTodo()} >登録</button>
+          <button onClick={() => this.addTodo(todos.length)} >登録</button>
 
 
         </div>
