@@ -41,9 +41,6 @@ const FavoriteButton = ({isDoing, onClick}) => (
           todos:todos
         })
       })
-
-
-
     }
 
     removeTodo = (index) => {
