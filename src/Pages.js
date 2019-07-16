@@ -8,7 +8,8 @@ import immutable from 'immutable'
 
 import Api from './Api'
 
-const api = new Api(`https://todoapp1990359.herokuapp.com:4000`)
+//const api = new Api(`http://127.0.0.1:4000`)
+const api = new Api(`https://todoapp1990359.herokuapp.com`)
 
 const FavoriteButton = ({isDoing, onClick}) => (
   <FaRegCheckSquare style={{cursor: "pointer"}} color={isDoing ? "#ffa500" : "#eee"} onClick={onClick} />)
