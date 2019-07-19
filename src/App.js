@@ -9,8 +9,9 @@ const Header = ({onClick}) => (
 
 const Nav = () => (
   <ul className="nav nav-pills">
-    <li><NavLink exact to="/pages">--ToDoList--</NavLink></li>
-    <li><NavLink exact to="/pages/doing">--Doning List--</NavLink></li>
+    <li style={{marginRight:"50px"}} class="siimple-btn siimple-btn--grey"><NavLink exact to="/pages">ToDoList</NavLink></li>
+    <li style={{marginRight:"50px"}} class="siimple-btn siimple-btn--grey"><NavLink exact to="/pages/doing">DoingList</NavLink></li>
+    <li class="siimple-btn siimple-btn--grey"><NavLink exact to="/pages/done" >DoneList</NavLink></li>
   </ul>
 )
 
@@ -19,16 +20,13 @@ const Footer = () => (<p className="text-center">ToDo List</p>)
 const Routes = withRouter(({history}) => (
   <div className="container">
     <Header onClick={() => history.push("/")} />
-
-
     <Nav />
     <Switch>
       <Route exact path="/" component={Pages.List}/>
       <Route exact path="/pages" component={Pages.List}/>
       <Route exact path="/pages/doing" component={Pages.DoingList}/>
-      <Route exact path="/pages/:id" component={Pages.Show}/>
+      <Route exact path="/pages/done" component={Pages.DoneList}/>
     </Switch>
-
     <Footer />
   </div>
 ))

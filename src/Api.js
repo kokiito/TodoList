@@ -14,7 +14,7 @@ export default class Api {
     this.baseUrl = baseUrl
   }
 
-  listArticles(page=1) {
+  listTodos(page=1) {
     return axios.get(`${this.baseUrl}/api/todos?_page=${page}`).then((res) => {
       return {
         "todos": res.data || [],
@@ -23,8 +23,8 @@ export default class Api {
     })
   }
 
-  listFavoriteArticles(page=1) {
-    return axios.get(`${this.baseUrl}/api/todos?isDoing=true&_page=${page}&_limit=50`).then((res) => {
+  listDoings(page=1) {
+    return axios.get(`${this.baseUrl}/api/todos?isDone=false&_page=${page}&_limit=50`).then((res) => {
       return {
         "todos": res.data || [],
         "links": parse(res.headers.link)
@@ -32,11 +32,16 @@ export default class Api {
     })
   }
 
-  showPage(id) {
-    return axios.get(`${this.baseUrl}/api/todos/${id}`).then((res) => {
-      return { "todos": res.data }
-   })
+  listisDones(page=1) {
+    return axios.get(`${this.baseUrl}/api/todos?isDone=true&_page=${page}&_limit=50`).then((res) => {
+      return {
+        "todos": res.data || [],
+        "links": parse(res.headers.link)
+      }
+    })
   }
+
+
 
   updateTodo(id, params) {
     return axios.put(`${this.baseUrl}/api/todos/${id}`, params).then((res) => {
@@ -50,7 +55,7 @@ export default class Api {
     return Date.now().toString(16) + Math.floor(strong * Math.random()).toString(16);
     }
 
-    return axios.post(`${this.baseUrl}/api/todos/`, {id: uniqueId(),title: title,isDoing:false}).then((res) => {
+    return axios.post(`${this.baseUrl}/api/todos/`, {id: uniqueId(),title: title,isDone:false}).then((res) => {
       return { "todo": res.data }
     })
 
@@ -58,7 +63,6 @@ export default class Api {
   }
 
   deleteTodo(id) {
-
     return axios.delete(`${this.baseUrl}/api/todos/` + id).then((res) => {
       return { "todo": res.data }
     })
