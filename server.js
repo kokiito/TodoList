@@ -27,7 +27,7 @@ function setTodos() {
     todos.push({
       "id": 2,
       "title": 'サーバを立てる',
-      "isdoing": true
+      "isdone": true
     })
 
 
