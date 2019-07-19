@@ -20,7 +20,7 @@ function setTodos() {
 
     todos.push({
       "id": 1,
-      "title": 'コードを書く',
+      "title": 'クライアントのフロントを作成する',
       "isdoing": false
     })
 
